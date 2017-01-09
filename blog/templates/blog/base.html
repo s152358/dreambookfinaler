@@ -1,12 +1,13 @@
 {% load staticfiles %}
-<html>
 
+<html>
 <head>
-    <title>Django Girls blog</title>
+    <title>Share Lorem Ipsum Forum</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 
 </head>
 
@@ -18,8 +19,9 @@
       <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
   {% else %}
       <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+      <a href="{% url 'register_page' %}" class="top-menu"><span class="glyphicon glyphicon-user"></span></a>
   {% endif %}
-  <h1><a href="/">Django Girls Blog</a></h1>
+  <h1><a href="/">Share Lorem Ipsum Forum</a></h1>
 </div>
 
     <div class="content container">
