@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from rest_framework import generics
-from .serializers import CommentSerializer
+from .serializers import PostSerializer
 
 
 def post_list(request):
@@ -113,9 +113,9 @@ def can_edit (request, pk):
         return render(request, 'blog/post_detail.html', {'post':post, 'can_edit': False})
 
 class PostsList(generics.ListCreateAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 class PostsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
