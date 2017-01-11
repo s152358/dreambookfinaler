@@ -3,7 +3,7 @@ from .models import Post, Comment
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm, CommentForm, RegistrationForm
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
@@ -11,6 +11,10 @@ from django.http import HttpResponseRedirect
 from rest_framework import generics
 from .serializers import CommentSerializer
 
+
+def author_check(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return post.author.endwith(request.user)
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -104,11 +108,11 @@ def register_page(request):
     variables = RequestContext(request, {'form': form})
     return render_to_response('registration/register.html',variables)
 
+
 def can_edit (request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.author = request.user
     if post.author==request.user:
-        return render(request, 'blog/post_detail.html', {'post':post, 'can_edit': True})
+        return render(request, 'blog/post_detail.html', {'post': post, 'can_edit': True})
     else:
         return render(request, 'blog/post_detail.html', {'post':post, 'can_edit': False})
 
