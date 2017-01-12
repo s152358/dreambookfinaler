@@ -109,9 +109,11 @@ def register_page(request):
     return render_to_response('registration/register.html',variables)
 
 def view_profile(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.author = request.user
-    return render(request, 'blog/profile.html', {'post.author': post.author})
+    '''post = get_object_or_404(Post, pk=pk)
+    post.author = request.user'''
+    print(pk)
+    posts = Post.objects.filter(author=pk)
+    return render(request, 'blog/profile.html', {'posts': posts})
 
 class PostsList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()

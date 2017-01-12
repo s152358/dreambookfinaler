@@ -6,8 +6,8 @@
         </div>
         <div class="post">
             <div class="date">
-                <p>Welcome to my page</p>
-            </div>
+              <h1>{{ post.title }}</h1>
+              <p>{{ post.text|linebreaksbr }}</p>
           </div>
     {% endfor %}
 {% endblock content %}
