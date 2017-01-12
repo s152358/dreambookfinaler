@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^accounts/register/$', views.register_page, name='register_page'),
     url(r'^api/$', views.PostsList.as_view()),
     url(r'^api/(?P<pk>[0-9]+)/$', views.PostsDetail.as_view()),
-
+    url(r'^accounts/profile/(?P<pk>\d+)/$', views.view_profile, name='view_profile'),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -108,13 +108,10 @@ def register_page(request):
     variables = RequestContext(request, {'form': form})
     return render_to_response('registration/register.html',variables)
 
-
-def can_edit (request, pk):
+def view_profile(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if post.author==request.user:
-        return render(request, 'blog/post_detail.html', {'post': post, 'can_edit': True})
-    else:
-        return render(request, 'blog/post_detail.html', {'post':post, 'can_edit': False})
+    post.author = request.user
+    return render(request, 'blog/profile.html', {'post.author': post.author})
 
 class PostsList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()

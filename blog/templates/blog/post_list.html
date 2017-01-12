@@ -6,7 +6,7 @@
                 {{ post.published_date }}
             </div>
             <div class="date">
-                {{ post.author }}
+                <a href="{% url 'view_profile' pk=post.author.pk%}">{{ post.author }}</a>
             </div>
             <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
             <p>{{ post.text|linebreaksbr }}</p>

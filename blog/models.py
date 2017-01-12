@@ -10,7 +10,6 @@ class Post(models.Model):
             default=timezone.now)
     published_date = models.DateTimeField(
             blank=True, null=True)
-
     def publish(self):
         self.published_date = timezone.now()
         self.save()
@@ -35,3 +34,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+class Profile(models.Model):
+        user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
