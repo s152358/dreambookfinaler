@@ -1,5 +1,5 @@
 from django.utils import timezone
-from .models import Post, Comment
+from .models import Post, Comment, VoteUser
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm, CommentForm, RegistrationForm
 from django.shortcuts import redirect
@@ -85,18 +85,7 @@ def add_comment_to_post(request, pk):
         form = CommentForm()
     return render(request, 'blog/add_comment_to_post.html', {'form': form})
 
-@login_required
-def comment_approve(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.approve()
-    return redirect('post_detail', pk=comment.post.pk)
 
-@login_required
-def comment_remove(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    post_pk = comment.post.pk
-    comment.delete()
-    return redirect('post_detail', pk=post_pk)
 
 def register_page(request):
     if request.method == 'POST':
@@ -109,11 +98,34 @@ def register_page(request):
     return render_to_response('registration/register.html',variables)
 
 def view_profile(request, pk):
-    '''post = get_object_or_404(Post, pk=pk)
-    post.author = request.user'''
-    print(pk)
-    posts = Post.objects.filter(author=pk)
+    posts = Post.objects.filter(author=pk, published_date__lte=timezone.now()).order_by('published_date')
     return render(request, 'blog/profile.html', {'posts': posts})
+@login_required
+def dream_vote(request,pk):
+    post = get_object_or_404(Post, pk=pk)
+    if len(VoteUser.objects.filter(user=request.user, post=post)) < 1:
+        post.vote_count_up()
+        user_voted = VoteUser(user=request.user, post=post)
+        user_voted.save()
+        return redirect('post_detail', pk=post.pk)
+    else:
+        post.vote_count_up_undo()
+        VoteUser.objects.filter(user=request.user, post=post).delete()
+        return redirect('post_detail', pk=post.pk)
+
+@login_required
+def nightmare_vote(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if len(VoteUser.objects.filter(user=request.user, post=post)) < 1:
+        post.vote_count_down()
+        user_voted = VoteUser(user=request.user, post=post)
+        user_voted.save()
+
+        return redirect('post_detail', pk=post.pk)
+    else:
+        post.vote_count_down_undo()
+        VoteUser.objects.filter(user=request.user, post=post).delete()
+        return redirect('post_detail', pk=post.pk)
 
 class PostsList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
